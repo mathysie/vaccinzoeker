@@ -72,7 +72,7 @@ def NotifyUser(vaccins: list):
     n.show_toast(
         title="{} vaccins gevonden!\n".format(len(vaccins)),
         msg=text,
-        icon_path='../img/Spuit.ico',
+        icon_path='./Spuit.ico',
         duration=20,
         threaded=True
     )
