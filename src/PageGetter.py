@@ -6,9 +6,9 @@ from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
-from win10toast import ToastNotifier
 
 from Constants import Constants
+from Notifier import Notifier
 
 secondsForSleep = 5
 CANCELLED = 'Cancelled'
@@ -63,21 +63,6 @@ def GetVaccins(soup: BeautifulSoup) -> list:
     return [len(praktijken), results]
 
 
-def NotifyUser(vaccins: list):
-    text = ""
-    for vaccin in vaccins:
-        text += vaccin + '\n'
-
-    n = ToastNotifier()
-    n.show_toast(
-        title="{} vaccins gevonden!\n".format(len(vaccins)),
-        msg=text,
-        icon_path='./Spuit.ico',
-        duration=20,
-        threaded=True
-    )
-
-
 def GetLocation() -> str:
     asking = True
     while asking:
@@ -101,7 +86,7 @@ def main():
         soup = GetSearchResults(location)
         vaccins = GetVaccins(soup)
         if len(vaccins[1]) > 0:
-            NotifyUser(vaccins[1])
+            Notifier.Notify(vaccins[1])
         else:
             print("{}\t{} praktijken: geen vaccin!".format(datetime.now().strftime("%d %b %Y %H:%M:%S"), vaccins[0]))
 
