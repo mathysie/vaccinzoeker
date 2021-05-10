@@ -1,66 +1,14 @@
 import locale
 import random
-import sys
 import time
 from datetime import datetime
 
-import requests
-from bs4 import BeautifulSoup
-
-from Constants import Constants
 from Notifier import Notifier
+from VaccinParser import VaccinParser
 
-secondsForSleep = 5
 CANCELLED = 'Cancelled'
 
 locale.setlocale(locale.LC_ALL, '')
-
-
-def TestConnection(client: requests.Session):
-    status_code = client.get(Constants.URL).status_code
-    if status_code != 200:
-        print("Error: Website niet gevonden, status code {}.", status_code, file=sys.stderr)
-        time.sleep(secondsForSleep)
-        TestConnection(client)
-
-
-def ParseCSRF(client: requests.Session) -> str:
-    html = BeautifulSoup(client.get(Constants.URL).text, 'html.parser')
-    token = html.find(class_="location-selector").find(attrs={"name": "_token"})
-    return token['value']
-
-
-def GetSearchResults(location: str) -> BeautifulSoup:
-    def errorHandler(message):
-        print(message, file=sys.stderr)
-        time.sleep(secondsForSleep)
-        GetSearchResults(location)
-
-    client = requests.session()
-    TestConnection(client)
-
-    csrf = ParseCSRF(client)
-    data = {"_token": csrf, "location": location}
-    r = client.post(Constants.URL + Constants.FORM, data=data)
-    if r.status_code == 419:
-        errorHandler("Error: CSRF-token niet goed doorgegeven.")
-    elif r.status_code != 200:
-        errorHandler("Error: onbekende status code: {}".format(r.status_code))
-    else:
-        return BeautifulSoup(r.text, 'html.parser')
-
-
-def GetVaccins(soup: BeautifulSoup) -> list:
-    praktijken = soup.find(id="locations-container").find_all(class_="card")
-    if len(praktijken) == 0:
-        return [0, []]
-
-    results = []
-    for praktijk in praktijken:
-        if 'op-is-op' in praktijk.attrs['class']:
-            results.append(praktijk.find('h5').text.strip().replace('\n', ' '))
-
-    return [len(praktijken), results]
 
 
 def GetLocation() -> str:
@@ -82,9 +30,10 @@ def main():
     if (location.lower() == CANCELLED):
         return
 
+    parser = VaccinParser(location)
+
     while True:
-        soup = GetSearchResults(location)
-        vaccins = GetVaccins(soup)
+        vaccins = parser.GetVaccins()
         if len(vaccins[1]) > 0:
             Notifier.Notify(vaccins[1])
         else:
