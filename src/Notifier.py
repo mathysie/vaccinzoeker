@@ -4,9 +4,7 @@ from win10toast import ToastNotifier
 class Notifier:
     @staticmethod
     def Notify(vaccins: list) -> None:
-        text = ""
-        for vaccin in vaccins:
-            text += vaccin + '\n'
+        text = '\n'.join(vaccins)
 
         n = ToastNotifier()
         n.show_toast(
