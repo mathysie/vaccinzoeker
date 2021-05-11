@@ -14,7 +14,7 @@ locale.setlocale(locale.LC_ALL, '')
 def GetLocation() -> str:
     asking = True
     while asking:
-        location = input("Welk gebied wil je zoeken?\n")
+        location = input("Welke plaats of postcode wil je zoeken?\n")
         confirm = input("Klopt locatie '{}'?\n[J]=Ja, [N]=Nee, [C]=Cancel\n".format(location))
         if confirm.lower() == 'j':
             asking = False
