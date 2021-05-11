@@ -21,3 +21,4 @@ Het programma is tot stand gekomen met behulp van de volgende externe pakketten:
 - [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/)
 - [Juicy Fish](https://icon-icons.com/nl/pictogram/injectie-vaccin-vaccinatie-naald-genezen-coronavirus/141460)
 - [Prullenbakvaccin.nl](https://prullenbakvaccin.nl)
+- [Windows 10 Toast Notification](https://github.com/jithurjacob/Windows-10-Toast-Notifications)
