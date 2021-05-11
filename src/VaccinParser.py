@@ -53,7 +53,7 @@ class VaccinParser:
 
         results = []
         for praktijk in praktijken:
-            if 'op-is-op' not in praktijk.attrs['class']:
+            if 'op-is-op' not in [s.strip() for s in praktijk.attrs['class']]:
                 results.append(praktijk.find('h5').text.strip().replace('\n', ' '))
 
         return [len(praktijken), results]
