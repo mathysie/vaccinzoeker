@@ -17,14 +17,17 @@ class VaccinParser:
     def __TestConnection(self, client: requests.Session):
         status_code = client.get(Constants.URL).status_code
         if status_code != 200:
-            print("Error: Website niet gevonden, status code {}.", status_code, file=sys.stderr)
+            print("Error: Website niet gevonden, status code {}.".format(status_code), file=sys.stderr)
             time.sleep(self.__secondsForSleep)
             self.__TestConnection(client)
 
     def __ParseCSRF(self, client: requests.Session) -> str:
         html = BeautifulSoup(client.get(Constants.URL).text, 'html.parser')
-        token = html.find(class_="location-selector").find(attrs={"name": "_token"})
-        return token['value']
+        if html is not None:
+            token = html.find(class_="location-selector").find(attrs={"name": "_token"})
+            return token['value']
+        else:
+            return ""
 
     def __GetSearchResults(self, location: str) -> BeautifulSoup:
         def errorHandler(message):
