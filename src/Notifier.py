@@ -11,6 +11,6 @@ class Notifier:
             title="{} vaccins gevonden!\n".format(len(vaccins)),
             msg=text,
             icon_path='./Spuit.ico',
-            duration=20,
+            duration=10,
             threaded=True
         )

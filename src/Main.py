@@ -39,7 +39,7 @@ def main():
         else:
             print("{}\t{} praktijken: geen vaccin!".format(datetime.now().strftime("%d %b %Y %H:%M:%S"), vaccins[0]))
 
-        time.sleep(random.gauss(30, 3))
+        time.sleep(random.gauss(12, 1))
 
 
 main()
