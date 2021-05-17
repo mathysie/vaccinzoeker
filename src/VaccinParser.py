@@ -30,7 +30,7 @@ class VaccinParser:
         def errorHandler(message):
             print(message, file=sys.stderr)
             time.sleep(self.__secondsForSleep)
-            self.__GetSearchResults(location)
+            return self.__GetSearchResults(location)
 
         client = requests.session()
         self.__TestConnection(client)
@@ -39,9 +39,9 @@ class VaccinParser:
         data = {"_token": csrf, "location": location}
         r = client.post(Constants.URL + Constants.FORM, data=data)
         if r.status_code == 419:
-            errorHandler("Error: CSRF-token niet goed doorgegeven.")
+            return errorHandler("Error: CSRF-token niet goed doorgegeven.")
         elif r.status_code != 200:
-            errorHandler("Error: onbekende status code: {}".format(r.status_code))
+            return errorHandler("Error: onbekende status code: {}".format(r.status_code))
         else:
             return BeautifulSoup(r.text, 'html.parser')
 
